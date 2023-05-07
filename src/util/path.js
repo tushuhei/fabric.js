@@ -814,10 +814,22 @@
   /**
    * Join path commands to go back to svg format
    * @param {Array} pathData fabricJS parsed path commands
+   * @param {number} fractionDigits number of fraction digits to "leave" (optional)
    * @return {String} joined path 'M 0 0 L 20 30'
    */
-  fabric.util.joinPath = function(pathData) {
-    return pathData.map(function (segment) { return segment.join(' '); }).join(' ');
+  fabric.util.joinPath = function (pathData, fractionDigits) {
+    return pathData
+      .map(function (segment) {
+        return segment
+          .map(function (arg, i) {
+            if (i === 0) {return arg;}
+            return fractionDigits === undefined
+              ? arg
+              : fabric.util.toFixed(arg, fractionDigits);
+          })
+          .join(' ');
+      })
+      .join(' ');
   };
   fabric.util.parsePath = parsePath;
   fabric.util.makePathSimpler = makePathSimpler;

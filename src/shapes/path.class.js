@@ -191,7 +191,7 @@
      * of the instance
      */
     _toSVG: function() {
-      var path = fabric.util.joinPath(this.path);
+      var path = fabric.util.joinPath(this.path, fabric.Object.NUM_FRACTION_DIGITS);
       return [
         '<path ', 'COMMON_PARTS',
         'd="', path,
