@@ -2188,9 +2188,10 @@ fabric.CommonMethods = {
    * simplification consist of: only UPPERCASE absolute commands ( relative converted to absolute )
    * S converted in C, T converted in Q, A converted in C.
    * @param {Array} path the array of commands of a parsed svg path for fabric.Path
+   * @param {number} fractionDigits number of fraction digits to "leave" (optional)
    * @return {Array} the simplified array of commands of a parsed svg path for fabric.Path
    */
-  function makePathSimpler(path) {
+  function makePathSimpler(path, fractionDigits) {
     // x and y represent the last point of the path. the previous command point.
     // we add them to each relative command to make it an absolute comment.
     // we also swap the v V h H with L, because are easier to transform.
@@ -2353,7 +2354,17 @@ fabric.CommonMethods = {
       }
       previous = current[0];
     }
-    return destinationPath;
+    return fractionDigits === undefined
+      ? destinationPath
+      : destinationPath.map(function (command) {
+          return command.map(function (item, i) {
+            if (i === 0) return item;
+            return (
+              Math.round(item * Math.pow(10, fractionDigits)) /
+              Math.pow(10, fractionDigits)
+            );
+          });
+        });
   };
 
   /**
@@ -19823,7 +19834,8 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     */
     _setPath: function (path, options) {
       this.path = fabric.util.makePathSimpler(
-        Array.isArray(path) ? path : fabric.util.parsePath(path)
+        Array.isArray(path) ? path : fabric.util.parsePath(path),
+        fabric.Object.NUM_FRACTION_DIGITS
       );
 
       fabric.Polyline.prototype._setPositionDimensions.call(this, options || {});

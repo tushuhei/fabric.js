@@ -61,7 +61,8 @@
     */
     _setPath: function (path, options) {
       this.path = fabric.util.makePathSimpler(
-        Array.isArray(path) ? path : fabric.util.parsePath(path)
+        Array.isArray(path) ? path : fabric.util.parsePath(path),
+        fabric.Object.NUM_FRACTION_DIGITS
       );
 
       fabric.Polyline.prototype._setPositionDimensions.call(this, options || {});
