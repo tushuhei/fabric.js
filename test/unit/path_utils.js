@@ -115,6 +115,6 @@
     ];
     const expected = "M 3.12345678 2.12345678 L 1.00001111 2.40001111 Z";
     const result = fabric.util.joinPath(pathData);
-    assert.equal(result, expected, 'path data should have the specified number or less of fraction digits.');
+    assert.equal(result, expected, 'path data should not be rounded when no fraction digits is given.');
   });
 })();
